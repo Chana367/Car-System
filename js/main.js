@@ -1,4 +1,3 @@
-let menu = true;
 let listadoAutos = [
   {
     marca: "Toyota",
@@ -22,41 +21,6 @@ let listadoAutos = [
     precio: 80000000
   }
 ];
-
-function loadMenu() {
-  do{
-    let opcion = parseInt(prompt(`Elige una opción (expresalo en numeros):
-                                      1- Agregar auto
-                                      2- Modificar Auto
-                                      3- Eliminar Auto
-                                      4- Mostrar Autos
-                                      5- Cerrar Sistema`))
-    menu = false; // cierro el ciclo
-    switch (opcion) {
-      case 1:
-        addCar();
-        break;
-      case 2:
-        editCar();
-        break;
-      case 3:
-        // esta funcion es para eliminar el ultimo auto del array
-        deleteCar();
-        break
-      case 4:
-        viewCars();
-        break
-      case 5:
-          console.log("Cerrar Sistema");
-          break
-      default:
-        menu = true; //ejecuta nuevamente el menu
-        console.error("La opción ingresada no es valida")
-        break
-    }
-
-  }while(menu);
-}
 
 function editCar(){
   const idAuto = document.getElementById("idAuto").value;
