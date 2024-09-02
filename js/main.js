@@ -59,20 +59,12 @@ function loadMenu() {
 }
 
 function editCar(){
-  const indexAuto = parseInt(prompt("Ingresa el nro del auto a modificar: "))
-  if(indexAuto > 0 && indexAuto <= listadoAutos.length){
-    const canEdit = confirm("¿Seguro que quieres editar los datos del auto: " + listadoAutos[indexAuto - 1].marca
-      + " " + listadoAutos[indexAuto - 1].modelo + "?")  
-    if(canEdit){
-      //solo dejo modificar los km
-      const km = parseInt(prompt("Ingresa la cantidad de km del auto"))
-      listadoAutos[indexAuto].km = km
-      alert("Auto modificado exitosamente!!!")
-    }
-  }else{
-    console.warn("No tenemos registrado un auto con ese id")
+  const idAuto = document.getElementById("idAuto").value;
+  if(idAuto > 0 && idAuto <= listadoAutos.length){
+    const auto = listadoAutos[idAuto - 1];
+    saveStorage('autoEdit', auto);
+    window.location.href = 'html/add.html';
   }
-  loadMenu();
 }
 
 function deleteCar() {
@@ -83,19 +75,6 @@ function deleteCar() {
     loadData();
     restaurarBtn();
   }
-}
-
-function viewCars() {
-  const encabezado = "Listado de autos cargados: \n"
-  let msj = []
-  for(let i = 0; i < listadoAutos.length; i++){
-    msj.push(i + 1 + "- " + listadoAutos[i].marca + " " +  listadoAutos[i].modelo + " " +  listadoAutos[i].año 
-    + " " +  listadoAutos[i].km)
-  }
-  const msjFinal = msj.join("\n")
-  alert(encabezado + msjFinal)
-
-  loadMenu();
 }
 
 function loadData(){
@@ -124,12 +103,16 @@ function main() {
     listadoAutos = getStorage('autos');
   }
   loadData();
+  resetStorage('autoEdit'); // por si se sale de la pagina de edit sin presionar los btn
 }
 
 let btnDelete = document.getElementById("btn-delete");
-btnDelete.addEventListener('click', abrirInput);
+btnDelete.addEventListener('click', abrirInputDelete);
 
-function abrirInput(){
+let btnEdit= document.getElementById("btn-edit");
+btnEdit.addEventListener('click', abrirInputEdit);
+
+function abrirInputDelete(){
   let btnContainer = document.getElementById("btn-container");
   btnContainer.innerHTML = `<div class="col-md-4">
                       <label for="idAuto" class="form-label">Indica el nro de auto a eliminar</label>
@@ -145,13 +128,32 @@ function abrirInput(){
   eliminarAuto.addEventListener('click', deleteCar);
 }
 
+
+function abrirInputEdit(){
+  let btnContainer = document.getElementById("btn-container");
+  btnContainer.innerHTML = `<div class="col-md-4">
+                      <label for="idAuto" class="form-label">Indica el nro de auto a editar</label>
+                      <input type="text" class="form-control" id="idAuto" name="idAuto" required autofocus placeholder="Nro Auto">
+                    </div>
+                    <br>
+                    <button class="btn btn-secondary" id="btn-Cancelar">Cancelar</button>
+                    <button class="btn btn-primary" id="editarAuto">Editar</button>
+                    `
+  let btnCancelar = document.getElementById("btn-Cancelar");
+  btnCancelar.addEventListener('click', restaurarBtn);
+  let editarAuto = document.getElementById("editarAuto");
+  editarAuto.addEventListener('click', editCar);
+}
+
 function restaurarBtn(){
   let btnContainer = document.getElementById("btn-container");
   btnContainer.innerHTML = `<a href="html/add.html" class="btn btn-success">Agregar</a>
-                            <a href="edit.html" class="btn btn-warning">Editar</a>
+                            <a class="btn btn-warning" id="btn-edit">Editar</a>
                             <button type="button" class="btn btn-danger" id="btn-delete">Eliminar</button>`
   let btnDelete = document.getElementById("btn-delete");
-  btnDelete.addEventListener('click', abrirInput);                          
+  btnDelete.addEventListener('click', abrirInputDelete);                             
+  let btnEdit = document.getElementById("btn-edit");
+  btnEdit.addEventListener('click', abrirInputEdit);                          
 }
 
 //FUNCIONES DE LOCAL STORAGE
