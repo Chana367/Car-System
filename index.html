@@ -11,18 +11,23 @@
       <main class="flex-shrink-0">
         <div class="container">
             <h3 class="my-3" id="titulo">Lista de Autos</h3>
-
-            <a href="html/add.html" class="btn btn-success">Agregar</a>
-
+            <div id="btn-container">
+                <a href="html/add.html" class="btn btn-success">Agregar</a>
+                <a href="edit.html" class="btn btn-warning">Editar</a>
+                <!-- <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                data-bs-target="#eliminaModal" data-bs-id="1" id="btn-delete">Eliminar</button> -->
+                <button type="button" class="btn btn-danger" id="btn-delete">Eliminar</button>
+            </div>
+            
             <table class="table table-hover table-bordered my-3" aria-describedby="titulo">
                 <thead class="table-dark">
                     <tr>
+                        <th scope="col">Nro</th>
                         <th scope="col">Marca</th>
                         <th scope="col">Modelo</th>
                         <th scope="col">Año</th>
                         <th scope="col">Kilometraje</th>
                         <th scope="col">Precio</th>
-                        <th scope="col">Opciones</th>
                     </tr>
                 </thead>
 

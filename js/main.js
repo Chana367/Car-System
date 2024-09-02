@@ -76,14 +76,13 @@ function editCar(){
 }
 
 function deleteCar() {
-  // de momento elimino ultimo del registro
-  const canDelete = confirm("¿Seguro el auto mas antiguo de nuestro registro: " + listadoAutos[listadoAutos.length - 1].marca
-      + " " + listadoAutos[listadoAutos.length - 1].modelo + "?")
-  if(canDelete){
-    listadoAutos.pop()
-    alert("Auto eliminado exitosamente!!!")
+  const idAuto = document.getElementById("idAuto").value;
+  if(idAuto > 0 && idAuto <= listadoAutos.length){
+    listadoAutos.splice(idAuto - 1, 1);
+    saveStorage('autos', listadoAutos);
+    loadData();
+    restaurarBtn();
   }
-  loadMenu()
 }
 
 function viewCars() {
@@ -101,20 +100,16 @@ function viewCars() {
 
 function loadData(){
  let dataAutos = document.getElementById("data-autos");
+ dataAutos.innerHTML = ""
  if(listadoAutos.length > 0){
-   listadoAutos.forEach((auto)=>{
+   listadoAutos.forEach((auto, index)=>{
      let contenedor = document.createElement('tr')
-     contenedor.innerHTML =`<td>${auto.marca}</td>
+     contenedor.innerHTML =`<td>${index + 1}</td>
+     <td>${auto.marca}</td>
      <td>${auto.modelo}</td>
      <td>${auto.año}</td>
      <td>${auto.km}</td>
-     <td>${auto.precio}</td>
-     <td>
-     <a href="edit.html" class="btn btn-warning btn-sm me-2">Editar</a>
-     
-     <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-     data-bs-target="#eliminaModal" data-bs-id="1">Eliminar</button>
-     </td>`
+     <td>${auto.precio}</td>`
      dataAutos.appendChild(contenedor)
     })
     saveStorage("autos", listadoAutos)
@@ -129,6 +124,34 @@ function main() {
     listadoAutos = getStorage('autos');
   }
   loadData();
+}
+
+let btnDelete = document.getElementById("btn-delete");
+btnDelete.addEventListener('click', abrirInput);
+
+function abrirInput(){
+  let btnContainer = document.getElementById("btn-container");
+  btnContainer.innerHTML = `<div class="col-md-4">
+                      <label for="idAuto" class="form-label">Indica el nro de auto a eliminar</label>
+                      <input type="text" class="form-control" id="idAuto" name="idAuto" required autofocus placeholder="Nro Auto">
+                    </div>
+                    <br>
+                    <button class="btn btn-secondary" id="btn-Cancelar">Cancelar</button>
+                    <button class="btn btn-danger" id="eliminarAuto">Eliminar</button>
+                    `
+  let btnCancelar = document.getElementById("btn-Cancelar");
+  btnCancelar.addEventListener('click', restaurarBtn);
+  let eliminarAuto = document.getElementById("eliminarAuto");
+  eliminarAuto.addEventListener('click', deleteCar);
+}
+
+function restaurarBtn(){
+  let btnContainer = document.getElementById("btn-container");
+  btnContainer.innerHTML = `<a href="html/add.html" class="btn btn-success">Agregar</a>
+                            <a href="edit.html" class="btn btn-warning">Editar</a>
+                            <button type="button" class="btn btn-danger" id="btn-delete">Eliminar</button>`
+  let btnDelete = document.getElementById("btn-delete");
+  btnDelete.addEventListener('click', abrirInput);                          
 }
 
 //FUNCIONES DE LOCAL STORAGE
