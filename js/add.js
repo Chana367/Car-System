@@ -1,3 +1,5 @@
+import {getStorage, resetStorage, saveStorage} from './local-storage.js';
+
 class Auto {
   constructor(marca, modelo, año, km, precio) {
     this.marca = marca;
@@ -11,7 +13,7 @@ let auto = null;
 // Agregar auto
 let btn = document.getElementById("btn-agregar");
 btn.addEventListener('click', addCar);
-const listadoAutos = JSON.parse(localStorage.getItem('autos')); // Recupero la informacion del localStorage
+const listadoAutos = getStorage('autos'); // Recupero la informacion del localStorage
 console.log(listadoAutos)
 
 function addCar() {
@@ -25,7 +27,7 @@ function addCar() {
   //uso unshift para posicionar primero autos mas nuevos para el registro
   listadoAutos.unshift(nuevoAuto);
 
-  localStorage.setItem('autos', JSON.stringify(listadoAutos)) // guardo en el LocalStorage el resultado
+  saveStorage('autos', listadoAutos) // guardo en el LocalStorage el resultado
 
   let contenedor = document.getElementById("contenedor");
   contenedor.innerHTML = `<h3 class="my-3">Auto Agregado Exitosamente!!!</h3>
@@ -37,16 +39,6 @@ function addCar() {
   btnHome.addEventListener("click", function() {
     window.location.href = "../index.html";
   });
-}
-
-
-//GET storage
-function getStorage(clave) {
-  return JSON.parse(localStorage.getItem(clave)); // Recupero la informacion del localStorage, sino existe devuelve 1
-}
-
-const resetStorage = (clave) => {
-  localStorage.removeItem(clave); // reseteo en el LocalStorage
 }
 
 function main(){
@@ -87,7 +79,7 @@ function editCar() {
     listadoAutos[index].km = document.getElementById("km").value;
     listadoAutos[index].precio = document.getElementById("precio").value;
     resetStorage('autoEdit');
-    localStorage.setItem('autos', JSON.stringify(listadoAutos)) // guardo en el LocalStorage el resultado
+    saveStorage('autos', listadoAutos) // guardo en el LocalStorage el resultado
     window.location.href = '../index.html';
   }
 

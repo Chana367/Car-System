@@ -1,3 +1,5 @@
+import * as storageService from './local-storage.js';
+
 let listadoAutos = [
   {
     marca: "Toyota",
@@ -26,7 +28,7 @@ function editCar(){
   const idAuto = document.getElementById("idAuto").value;
   if(idAuto > 0 && idAuto <= listadoAutos.length){
     const auto = listadoAutos[idAuto - 1];
-    saveStorage('autoEdit', auto);
+    storageService.saveStorage('autoEdit', auto);
     window.location.href = 'html/add.html';
   }
 }
@@ -35,7 +37,7 @@ function deleteCar() {
   const idAuto = document.getElementById("idAuto").value;
   if(idAuto > 0 && idAuto <= listadoAutos.length){
     listadoAutos.splice(idAuto - 1, 1);
-    saveStorage('autos', listadoAutos);
+    storageService.saveStorage('autos', listadoAutos);
     loadData();
     restaurarBtn();
   }
@@ -55,19 +57,19 @@ function loadData(){
      <td>${auto.precio}</td>`
      dataAutos.appendChild(contenedor)
     })
-    saveStorage("autos", listadoAutos)
+    storageService.saveStorage("autos", listadoAutos)
   }
 }
 
 function main() {
-  const autos = getStorage('autos');
+  const autos = storageService.getStorage('autos');
   if(autos == null) {
-    saveStorage('autos', listadoAutos)
+    storageService.saveStorage('autos', listadoAutos)
   }else {
-    listadoAutos = getStorage('autos');
+    listadoAutos = storageService.getStorage('autos');
   }
   loadData();
-  resetStorage('autoEdit'); // por si se sale de la pagina de edit sin presionar los btn
+  storageService.resetStorage('autoEdit'); // por si se sale de la pagina de edit sin presionar los btn
 }
 
 let btnDelete = document.getElementById("btn-delete");
@@ -118,18 +120,6 @@ function restaurarBtn(){
   btnDelete.addEventListener('click', abrirInputDelete);                             
   let btnEdit = document.getElementById("btn-edit");
   btnEdit.addEventListener('click', abrirInputEdit);                          
-}
-
-//FUNCIONES DE LOCAL STORAGE
-function getStorage(clave) {
-  return JSON.parse(localStorage.getItem(clave)); // Recupero la informacion del localStorage, sino existe devuelve 1
-}
-function saveStorage(clave, valor) {
-  localStorage.setItem(clave, JSON.stringify(valor)) // guardo en el LocalStorage el resultado
-};
-
-const resetStorage = (clave) => {
-  localStorage.removeItem(clave); // reseteo en el LocalStorage
 }
 
 main();
