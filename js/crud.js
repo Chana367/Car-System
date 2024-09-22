@@ -29,19 +29,8 @@ function addCar() {
 
   saveStorage('autos', listadoAutos) // guardo en el LocalStorage el resultado
 
-  Swal.fire({
-    position: "center",
-    icon: "success",
-    title: "¡Auto agregado exitosamente!",
-    showConfirmButton: true,
-    confirmButtonText: `OK`,
-    allowOutsideClick: false,
-    allowEscapeKey: false,
-  }).then((result) => {
-      if (result.isConfirmed) {
-          window.location.href = "../index.html";
-      }
-  });
+  alertSuccess("agregado")
+
 }
 
 function main(){
@@ -83,9 +72,25 @@ function editCar() {
     listadoAutos[index].precio = document.getElementById("precio").value;
     resetStorage('autoEdit');
     saveStorage('autos', listadoAutos) // guardo en el LocalStorage el resultado
-    window.location.href = '../index.html';
+    alertSuccess("editado")
   }
 
+}
+
+function alertSuccess(accion){
+  Swal.fire({
+    position: "center",
+    icon: "success",
+    title: `¡Auto ${accion} exitosamente!`,
+    showConfirmButton: true,
+    confirmButtonText: `OK`,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+  }).then((result) => {
+      if (result.isConfirmed) {
+          window.location.href = "../index.html";
+      }
+  });
 }
 
 main()
