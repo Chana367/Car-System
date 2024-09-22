@@ -1,45 +1,89 @@
 import * as storageService from './local-storage.js';
 
-let listadoAutos = [
-  {
-    marca: "Toyota",
-    modelo: "Corolla",
-    año: 2019,
-    km: 15000,
-    precio: 7000000
-  },
-  {
-    marca: "Ford",
-    modelo: "Mustang",
-    año: 2021,
-    km: 5000,
-    precio: 120000000
-  },
-  {
-    marca: "Chevrolet",
-    modelo: "Camaro",
-    año: 2018,
-    km: 30000,
-    precio: 80000000
+let ruta = '/public/autos.json';
+let listadoAutos = [];
+//TODO: ARMAR README
+
+async function getAutos() {
+  let response = [];
+  try {
+    let peticion = await fetch(ruta)
+    response = await peticion.json()
+    return response;
+  }catch (err) {
+    console.error('Error:', err);
+  }finally{
+    return response; // Esto si ocurre un error retorna vacio
   }
-];
+}
 
 function editCar(){
   const idAuto = document.getElementById("idAuto").value;
   if(idAuto > 0 && idAuto <= listadoAutos.length){
     const auto = listadoAutos[idAuto - 1];
-    storageService.saveStorage('autoEdit', auto);
-    window.location.href = 'html/add.html';
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-primary",
+        cancelButton: "btn btn-danger"
+      },
+      buttonsStyling: false
+    });
+    swalWithBootstrapButtons.fire({
+      title: `¿Estas seguro que quieres editar el auto ${auto.marca} ${auto.modelo}?`,
+      text: "Si cambias los datos no los podras recuperar",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Editar",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const auto = listadoAutos[idAuto - 1];
+        storageService.saveStorage('autoEdit', auto);
+        window.location.href = 'html/add.html';
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        loadData();
+        restaurarBtn();
+      }
+    });
   }
 }
 
 function deleteCar() {
   const idAuto = document.getElementById("idAuto").value;
   if(idAuto > 0 && idAuto <= listadoAutos.length){
-    listadoAutos.splice(idAuto - 1, 1);
-    storageService.saveStorage('autos', listadoAutos);
-    loadData();
-    restaurarBtn();
+    const auto = listadoAutos[idAuto - 1];
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger"
+      },
+      buttonsStyling: false
+    });
+    swalWithBootstrapButtons.fire({
+      title: `¿Estas seguro que quieres eliminar el auto ${auto.marca} modelo ${auto.modelo}?`,
+      text: "¡Esta acción es irreversible!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Eliminar",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        listadoAutos.splice(idAuto - 1, 1);
+        storageService.saveStorage('autos', listadoAutos);
+        loadData();
+        restaurarBtn();
+        swalWithBootstrapButtons.fire({
+          title: "Auto Eliminado!",
+          text: "Tu operación se realizo correctamente.",
+          icon: "success"
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        loadData();
+        restaurarBtn();
+      }
+    });
   }
 }
 
@@ -57,13 +101,13 @@ function loadData(){
      <td>${auto.precio}</td>`
      dataAutos.appendChild(contenedor)
     })
-    storageService.saveStorage("autos", listadoAutos)
   }
 }
 
-function main() {
+async function main() {
   const autos = storageService.getStorage('autos');
   if(autos == null) {
+    listadoAutos = await getAutos(); // obtengo datos del json default
     storageService.saveStorage('autos', listadoAutos)
   }else {
     listadoAutos = storageService.getStorage('autos');

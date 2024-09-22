@@ -1,0 +1,23 @@
+[
+  {
+    "marca": "Toyota",
+    "modelo": "Corolla",
+    "año": 2019,
+    "km": 15000,
+    "precio": 7000000
+  },
+  {
+    "marca": "Ford",
+    "modelo": "Mustang",
+    "año": 2021,
+    "km": 5000,
+    "precio": 120000000
+  },
+  {
+    "marca": "Chevrolet",
+    "modelo": "Camaro",
+    "año": 2018,
+    "km": 30000,
+    "precio": 80000000
+  }
+]

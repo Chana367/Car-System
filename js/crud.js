@@ -29,15 +29,18 @@ function addCar() {
 
   saveStorage('autos', listadoAutos) // guardo en el LocalStorage el resultado
 
-  let contenedor = document.getElementById("contenedor");
-  contenedor.innerHTML = `<h3 class="my-3">Auto Agregado Exitosamente!!!</h3>
-                          <div class="col-12">
-                            <button class="btn btn-secondary" id="irHome">Ir Home</button>
-                          </div>`
-                          //irHome 
-  let btnHome = document.getElementById("irHome");
-  btnHome.addEventListener("click", function() {
-    window.location.href = "../index.html";
+  Swal.fire({
+    position: "center",
+    icon: "success",
+    title: "¡Auto agregado exitosamente!",
+    showConfirmButton: true,
+    confirmButtonText: `OK`,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+  }).then((result) => {
+      if (result.isConfirmed) {
+          window.location.href = "../index.html";
+      }
   });
 }
 
