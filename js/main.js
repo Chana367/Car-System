@@ -5,6 +5,11 @@ let listadoAutos = [];
 
 async function getAutos() {
   let response = [];
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    ruta = '../assets/data/autos.json';
+  } else {
+    ruta = 'https://chana367.github.io/Car-System/assets/data/autos.json';
+  }
   try {
     let peticion = await fetch(ruta)
     response = await peticion.json()
