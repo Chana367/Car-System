@@ -1,6 +1,6 @@
 import * as storageService from './local-storage.js';
 
-let ruta = '../public/autos.json';
+let ruta = '../assets/data/autos.json';
 let listadoAutos = [];
 
 async function getAutos() {
