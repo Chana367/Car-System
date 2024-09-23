@@ -2,7 +2,6 @@ import * as storageService from './local-storage.js';
 
 let ruta = '/public/autos.json';
 let listadoAutos = [];
-//TODO: ARMAR README
 
 async function getAutos() {
   let response = [];
@@ -94,6 +93,7 @@ function loadData(){
    listadoAutos.forEach((auto, index)=>{
      let contenedor = document.createElement('tr')
      contenedor.innerHTML =`<td>${index + 1}</td>
+     <td class="td-img"><img class="img-fluid" src='${auto.img}'></img></td>
      <td>${auto.marca}</td>
      <td>${auto.modelo}</td>
      <td>${auto.año}</td>

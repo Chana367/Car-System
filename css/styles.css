@@ -1,3 +1,17 @@
 main>.container {
   padding: 20px 30px 0;
 }
+
+.td-img{
+  display: flex;
+  justify-content: center;
+}
+
+.td-img img{
+  max-width: 90px;
+}
+
+.img-input {
+  display: flex;
+  flex-direction: column;
+}
